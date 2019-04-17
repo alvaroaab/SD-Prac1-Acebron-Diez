@@ -1,5 +1,6 @@
 from cos_backend import COSBackend
 import json
+import re
 
 def map_count_words(file, args):
     cos_params = args.get('cos_params')
@@ -39,8 +40,11 @@ def main(args):
     cos = COSBackend(args.get('cos_params'))
     space = args.get('space')
     byte_range = "bytes=" + str(int(space[0])) + "-" + str(int(space[1]))
-    file = cos.get_object(args.get('bucket_name'), args.get('file_name'), extra_get_args={'Range':byte_range})
+    file = cos.get_object(args.get('bucket_name'), args.get('file_name'), extra_get_args={'Range':byte_range}).decode('iso8859-15').lower()
+    
+    clean_file = re.sub('[.,;:-_*+(){!}@#%&?¿¡]', ' ', file)
+    
     if int(args.get('program')) == 1:
-        return map_count_words(file, args)
+        return map_count_words(clean_file, args)
     else:
-        return map_word_count(file, args)
+        return map_word_count(clean_file, args)
