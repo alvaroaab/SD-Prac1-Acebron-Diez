@@ -11,7 +11,7 @@ async def perform_cloud(name,params):
 	#global finalResult
 	result = ibm_cf.invoke_with_result(name, params)
 	if result.get("finish") != "OK":
-		print("Error")
+		print("Error: numero de particions massa petit")
 		sys.exit()
 
 with open('ibm_cloud_config', 'r') as config_file:
@@ -21,7 +21,7 @@ if len(sys.argv) != 3:
 	print("Han d'haver dos parametres: El fitxer a analitzar i el numero de particions")
 	sys.exit()
 
-bucket_name = 'acebron-diez-sd'
+bucket_name = input("Introdueixi el bucket name del IBM COS\n")
 program = int(input("Seleccioni programa:\n1. Counting Words\n2. Word Count\n"))
 if (program == 1 or program == 2):
 	cos_backend = COSBackend(res.get('ibm_cos'))
