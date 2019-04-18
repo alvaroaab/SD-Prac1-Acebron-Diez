@@ -9,7 +9,10 @@ from datetime import datetime
 #finalResult = {}
 async def perform_cloud(name,params):
 	#global finalResult
-	ibm_cf.invoke_with_result(name, params)
+	result = ibm_cf.invoke_with_result(name, params)
+	if result.get("finish") != "OK":
+		print("Error")
+		sys.exit()
 
 with open('ibm_cloud_config', 'r') as config_file:
 	res = yaml.safe_load(config_file)
@@ -50,7 +53,7 @@ if (program == 1 or program == 2):
 			print("Resultat: El fitxer conte "+str(result)+" paraules.")
 		else:
 			print("\nWord Count del fitxer "+file)
-			result = json.loads(cos_backend.get_object(bucket_name, 'final_'+file))
+			result = cos_backend.get_object(bucket_name, 'final_'+file)
 			print("Resultat:")
 			print(result)
 	else:
